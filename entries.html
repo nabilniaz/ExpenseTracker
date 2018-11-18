@@ -32,6 +32,12 @@
 	<script type="application/javascript">
         var totalss=0;
         var totalIncome=0;
+        var totSalary=0;
+        var totOther=0;
+        var totFood=0;
+        var totGas=0;
+        var totEntertainment=0;
+        var totMisc=0;
         
 		$(document).ready(function(){
 			var elm = document.getElementById('entriesUL'), li;
@@ -45,11 +51,30 @@
                         
                         if(results.rows.item(i).expenseType!='Salary' && results.rows.item(i).expenseType!='Other'){
                         totalss+= results.rows.item(i).expenseAmount;
+                            if(results.rows.item(i).expenseType=='Food'){
+                                totFood+=results.rows.item(i).expenseAmount;
+                            }
+                            else if(results.rows.item(i).expenseType=='Entertainment'){
+                                totEntertainment+=results.rows.item(i).expenseAmount;
+                            }
+                            else if(results.rows.item(i).expenseType=='Gas'){
+                                totGas+=results.rows.item(i).expenseAmount;
+                            }
+                            else{
+                             totMisc+=results.rows.item(i).expenseAmount;   
+                            }
+                            
                         }
                         
-                           if(results.rows.item(i).expenseType=='Salary' || results.rows.item(i).expenseType== 'Other'){
+                           if(results.rows.item(i).expenseType=='Salary' ||     results.rows.item(i).expenseType== 'Other'){
                         totalIncome+= results.rows.item(i).expenseAmount;
-                        }
+                            if(results.rows.item(i).expenseType=='Salary' ){
+                           totSalary+=results.rows.item(i).expenseAmount; 
+                            }
+                               else{
+                                   totOther+=results.rows.item(i).expenseAmount; 
+                               }
+                           }
                         
 						li.innerHTML = '<b>Type:</b> ' + results.rows.item(i).expenseType + '<br><b>Amount:</b> $' + formatCurrency(results.rows.item(i).expenseAmount) + 
                             '<br><b>Date</b> ' + results.rows.item(i).expenseDate + '<br><br>';
@@ -58,13 +83,14 @@
 						} else {
 							elm.appendChild(li);
 						}
-                    
+                    1
 
                     }        
 									       
 //for loop
-		        document.getElementById("test").innerHTML ='<b>Total Expenses: $</b>' +formatCurrency(totalss) ;
-                     document.getElementById("totIncome").innerHTML ='<b>Total Income: $</b>' +formatCurrency(totalIncome)
+		        document.getElementById("test").innerHTML ='<b>Total Expenses: $</b>' +formatCurrency(totalss) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Food:</b> $' + formatCurrency(totFood) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Entertainment:</b> $' + formatCurrency(totEntertainment) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Gas:</b> $' + formatCurrency(totGas)+ '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Misc:</b> $' + formatCurrency(totMisc)
+                    
+                     document.getElementById("totIncome").innerHTML ='<b>Totals Income: $</b>' +formatCurrency(totalIncome) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Salary:</b> $' + formatCurrency(totSalary) + '\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Other:</b> $' + formatCurrency(totOther);
 });
 			});
 
