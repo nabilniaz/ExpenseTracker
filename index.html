@@ -41,7 +41,7 @@
 
 		<div data-role="fieldcontain">
 			<label for="expenseDate">Date:</label>
-			<input type="date" name="expenseDate" id="expenseDate" value="1" />
+			<input type="date" name="expenseDate" id="expenseDate" value='date_string'/>
 		</div>
 
 		<p>
@@ -76,7 +76,23 @@
 		</p>
 
 	</form>
-	</div>
+        
+<!--
+<form id="BalanceForm" method="post">        			
+            <label for="Balance">Balance:</label>
+            <input type="number" name="balanceAmount" id="balanceAmount" value="" />
+    
+		<p>
+			<a href="" id="submitBalance" data-role="button">Save Balance</a>
+		</p>
+        </form>
+    <script type="application/javascript">
+        
+        balanceAmountVar = $('#balanceAmount');
+
+        </script>
+-->
+    </div>
 	
 	<!-- contentDialog -->
 	<div align="CENTER" data-role="content" id="contentDialog" name="contentDialog">
@@ -198,6 +214,7 @@
 			contentOKVar.hide();
 			confirmationOKVar.show();
 		}
+        
 	</script>
     
     <script type="application/javascript">
@@ -212,6 +229,7 @@
 			contentOKVar = $('#contentOK');
 			confirmationOKVar = $('#confirmationOK');
 			hideContentDialog();
+            
 			document.getElementById('expenseDate').value = date_string;
 		});
 	
