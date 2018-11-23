@@ -36,7 +36,7 @@
 
 		<div data-role="fieldcontain">
 			<label for="expenseAmount">Amount:</label>
-			<input type="number" name="expenseAmount" id="expenseAmount" value="1.25" />
+			<input type="number" name="expenseAmount" id="expenseAmount" value="0.0" />
 		</div>
 
 		<div data-role="fieldcontain">
@@ -63,7 +63,7 @@
 
 		<div data-role="fieldcontain">
 			<label for="IncomeAmount">Amount:</label>
-			<input type="number" name="IncomeAmount" id="IncomeAmount" value="1.25" />
+			<input type="number" name="IncomeAmount" id="IncomeAmount" value="0.0" />
 		</div>
 
 		<div data-role="fieldcontain">
@@ -77,22 +77,22 @@
 
 	</form>
         
-<!--
-<form id="BalanceForm" method="post">        			
-            <label for="Balance">Balance:</label>
-            <input type="number" name="balanceAmount" id="balanceAmount" value="" />
-    
+<form id="balanceForm" method="post">
+
+		
+		<div data-role="fieldcontain">
+			<label for="balanceAmount">Amount:</label>
+			<input type="number" name="balanceAmount" id="balanceAmount" value="0.0" />
+		</div>
+
+		
+
 		<p>
 			<a href="" id="submitBalance" data-role="button">Save Balance</a>
 		</p>
-        </form>
-    <script type="application/javascript">
-        
-        balanceAmountVar = $('#balanceAmount');
 
-        </script>
--->
-    </div>
+	</form>
+            </div>
 	
 	<!-- contentDialog -->
 	<div align="CENTER" data-role="content" id="contentDialog" name="contentDialog">
@@ -154,7 +154,7 @@
 			if(
 				expenseTypeVar.val() == EMPTY || expenseAmountVar.val() == EMPTY || expenseDateVar.val() == EMPTY
 				||
-				expenseTypeVar.val() == null || expenseAmountVar.val() == null || expenseDateVar.val() == null
+				expenseTypeVar.val() == null || expenseAmountVar.val() == null || expenseDateVar.val() == null || expenseAmountVar.val()<0
 			){
 				err = true;
 				errMessage = 'Please fill out the form.';
@@ -332,6 +332,117 @@
 			confirmationOKVar.show();
 		}
 	</script>
+    
+    <script type="application/javascript">
+		$(document).ready(function(){
+			// Assign global variables
+			contentMainVar = $('#contentMain');
+			IncomeTypeVar = $('#IncomeType');
+			balanceAmountVar = $('#balanceAmount');
+			IncomeDateVar = $('#expenseDate');
+			contentDialogVar = $('#contentDialog');
+			contentMessageVar = $('#contentMessage');
+			contentOKVar = $('#contentOK');
+			confirmationOKVar = $('#confirmationOK');
+			hideContentDialog();
+            
+			document.getElementById('expenseDate').value = date_string;
+		});
+	
+		$('#contentOK').click(function(){
+			hideContentDialog();
+			showMain();
+			return false;
+		});
+	
+		$('#contentOK').tap(function(){
+			hideContentDialog();
+			showMain();
+			return false;
+		});
+	
+		$('#submitBalance').click(function(){
+			$('#balanceForm').submit();
+			return false;
+		});
+	
+		$('#submitbalance').tap(function(){
+			$('#balanceForm').submit();
+			return false;
+		});
+	
+		$('#balanceForm').submit(function(){
+			var err = false;
+			var errMessage = null;
+	
+			// Hide the Main content
+			hideMain();
+	
+			// Show content dialog
+			showContentDialog();
+	
+			// Verify form is not empty
+			// Not intended to be comprehensive validation
+			// Keeping it simple for demo
+			
+	
+			// If validation fails, show Dialog content
+			if (err == true) {
+				contentDialogAsError(errMessage);
+				return false;
+			}
+	
+			// If validation passes, show Transition content
+			contentDialogAsTransition('Processing your request. Please wait.');
+	
+			// Save form to local Web SQL Database; Database initilized in jquery-custom-scripting.js
+			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
+			// Keeping it simple for demo
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate, balanceAmount) values (?, ?, ?,?)', [expenseTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val(), balanceAmountVar.val()],
+				function(tx, results) {
+					// Display confirmation message
+					contentDialogAsConfirmation('Balance has been added.');
+				},function(err) {
+					// Display error message
+					contentDialogAsError('Error processing SQL: ' + err.code);
+				});
+			});
+	
+			return false;
+		});
+	
+		function hideMain(){
+			contentMainVar.hide();
+		}
+		function showMain(){
+			contentMainVar.show();
+		}
+		function hideContentDialog(){
+			contentDialogVar.hide();
+		}
+		function showContentDialog(){
+			contentDialogVar.show();
+		}
+	
+		function contentDialogAsTransition(message){
+			contentMessageVar.text(message);
+			contentOKVar.hide();
+			confirmationOKVar.hide();
+		}
+		function contentDialogAsError(message){
+			contentMessageVar.text(message);
+			contentOKVar.show();
+			confirmationOKVar.hide();
+		}
+		function contentDialogAsConfirmation(message){
+			contentMessageVar.text(message);
+			contentOKVar.hide();
+			confirmationOKVar.show();
+		}
+        
+	</script>
+      
 
 	<div id="footerDiv" data-role="footer" data-theme="b" data-id="footer" data-position="fixed">
 		<div data-role="navbar" data-type="horizontal" align="center">
