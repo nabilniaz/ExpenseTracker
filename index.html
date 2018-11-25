@@ -17,7 +17,7 @@
 <div data-role="page">
 
 	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
-		<h1>Expense Tracker</h1>
+		<h1>MyMoney</h1>
 	</div>
 
 	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
@@ -75,7 +75,7 @@
 
 		<div data-role="fieldcontain">
 			<label for="IncomeDate">Date:</label>
-			<input type="date" name="IncomeDate" id="IncomeDate" value="" />
+			<input type="date" name="IncomeDate" id="IncomeDate" value='date_string' />
 		</div>
 
 		<p>
@@ -230,7 +230,7 @@
 			contentMainVar = $('#contentMain');
 			IncomeTypeVar = $('#IncomeType');
 			IncomeAmountVar = $('#IncomeAmount');
-			IncomeDateVar = $('#expenseDate');
+			IncomeDateVar = $('#IncomeDate');
 			contentDialogVar = $('#contentDialog');
 			contentMessageVar = $('#contentMessage');
 			contentOKVar = $('#contentOK');
@@ -346,7 +346,7 @@
 			contentMainVar = $('#contentMain');
 			IncomeTypeVar = $('#IncomeType');
 			balanceAmountVar = $('#balanceAmount');
-			IncomeDateVar = $('#expenseDate');
+			IncomeDateVar = $('#IncomeDate');
 			contentDialogVar = $('#contentDialog');
 			contentMessageVar = $('#contentMessage');
 			contentOKVar = $('#contentOK');
