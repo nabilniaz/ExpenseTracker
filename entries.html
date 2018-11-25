@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<meta charset="utf-8">
-	<title>Expense Tracker</title>
+	<title>MyMoney</title>
 	<link rel="stylesheet" href="jquery.mobile-1.0b1/jquery.mobile-1.0b1.min.css" />
 	<link rel="stylesheet" href="jquery-custom-styles.css" />
 	<script type="text/javascript" src="jquery.mobile-1.0b1/jquery-1.6.1.min.js"></script>
@@ -11,13 +11,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    <style type='text/css'>
+.ui-header {
+  background: 	#228B22;
+}
+</style>
 </head>
 <body>
 
 <div data-role="page">
 
 	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
-		<h1>Expense Tracker</h1>
+		<h1>MyMoney</h1>
 	</div>
 
 	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
@@ -133,7 +138,7 @@
             
 
 
-	<div id="footerDiv" data-role="footer" data-theme="b" data-id="footer" data-position="fixed">
+	<div id="footerDiv" data-role="footer" data-theme="e" data-id="footer" data-position="fixed">
 		<div data-role="navbar" data-type="horizontal" align="center">
 			<ul>
 				<li><a href="index.html" data-icon="check" data-iconpos="top" data-ajax="false">Expense</a></li>
