@@ -84,7 +84,16 @@
         
 <form id="balanceForm" method="post">
 
-		
+		<div data-role="fieldcontain">
+			<label for="balanceType">Type:</label>
+			<select name="balanceType" id="balanceType">
+				<option value="Bank">Bank</option>
+				<option value="masonMoney">Mason Money</option>
+			</select>
+		</div>	
+    
+    
+    
 		<div data-role="fieldcontain">
 			<label for="balanceAmount">Amount:</label>
 			<input type="number" name="balanceAmount" id="balanceAmount" value="0.0" />
@@ -342,7 +351,7 @@
 		$(document).ready(function(){
 			// Assign global variables
 			contentMainVar = $('#contentMain');
-			IncomeTypeVar = $('#IncomeType');
+			balanceTypeVar = $('#balanceType');
 			balanceAmountVar = $('#balanceAmount');
 			IncomeDateVar = $('#IncomeDate');
 			contentDialogVar = $('#contentDialog');
@@ -404,7 +413,7 @@
 			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
 			// Keeping it simple for demo
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate, balanceAmount) values (?, ?, ?,?)', [expenseTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val(), balanceAmountVar.val()],
+				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate, balanceAmount) values (?, ?, ?,?)', [balanceTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val(), balanceAmountVar.val()],
 				function(tx, results) {
 					// Display confirmation message
 					contentDialogAsConfirmation('Balance has been added.');
