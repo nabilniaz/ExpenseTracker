@@ -17,7 +17,7 @@
 <div data-role="page">
 
 	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
-		<h1>Expense Tracker</h1>
+		<h1>MyMoney</h1>
 	</div>
 
 	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
@@ -68,7 +68,7 @@
 
 		<div data-role="fieldcontain">
 			<label for="IncomeDate">Date:</label>
-			<input type="date" name="IncomeDate" id="IncomeDate" value="" />
+			<input type="date" name="IncomeDate" id="IncomeDate" value='date_string' />
 		</div>
 
 		<p>
@@ -79,7 +79,16 @@
         
 <form id="balanceForm" method="post">
 
-		
+		<div data-role="fieldcontain">
+			<label for="balanceType">Type:</label>
+			<select name="balanceType" id="balanceType">
+				<option value="Bank">Bank</option>
+				<option value="masonMoney">Mason Money</option>
+			</select>
+		</div>	
+    
+    
+    
 		<div data-role="fieldcontain">
 			<label for="balanceAmount">Amount:</label>
 			<input type="number" name="balanceAmount" id="balanceAmount" value="0.0" />
@@ -223,7 +232,7 @@
 			contentMainVar = $('#contentMain');
 			IncomeTypeVar = $('#IncomeType');
 			IncomeAmountVar = $('#IncomeAmount');
-			IncomeDateVar = $('#expenseDate');
+			IncomeDateVar = $('#IncomeDate');
 			contentDialogVar = $('#contentDialog');
 			contentMessageVar = $('#contentMessage');
 			contentOKVar = $('#contentOK');
@@ -337,9 +346,9 @@
 		$(document).ready(function(){
 			// Assign global variables
 			contentMainVar = $('#contentMain');
-			IncomeTypeVar = $('#IncomeType');
+			balanceTypeVar = $('#balanceType');
 			balanceAmountVar = $('#balanceAmount');
-			IncomeDateVar = $('#expenseDate');
+			IncomeDateVar = $('#IncomeDate');
 			contentDialogVar = $('#contentDialog');
 			contentMessageVar = $('#contentMessage');
 			contentOKVar = $('#contentOK');
@@ -399,7 +408,7 @@
 			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
 			// Keeping it simple for demo
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate, balanceAmount) values (?, ?, ?,?)', [expenseTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val(), balanceAmountVar.val()],
+				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate, balanceAmount) values (?, ?, ?,?)', [balanceTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val(), balanceAmountVar.val()],
 				function(tx, results) {
 					// Display confirmation message
 					contentDialogAsConfirmation('Balance has been added.');

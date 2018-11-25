@@ -39,7 +39,7 @@
         var totEntertainment=0;
         var totMisc=0;
         var balanceVar=0;
-        
+        var mason=0;
 		$(document).ready(function(){
 			var elm = document.getElementById('entriesUL'), li;
            // window.value+=results.rows.item(i).expenseAmount;
@@ -51,9 +51,15 @@
                         totexp = document.createElement('totexp');
                         
                          if(results.rows.item(i).balanceAmount!=null){
+                             if(results.rows.item(i).expenseType=='Bank'){
                         balanceVar = results.rows.item(i).balanceAmount;
                             continue;
                         }
+                        else{
+                            mason= results.rows.item(i).balanceAmount;
+                            continue;
+                        }
+                         }
                         
                         
                         
@@ -78,7 +84,6 @@
                            if(results.rows.item(i).expenseType=='Salary' ||     results.rows.item(i).expenseType== 'Other'){
                         totalIncome+= results.rows.item(i).expenseAmount;
                        balanceVar+= results.rows.item(i).expenseAmount;
-
                             if(results.rows.item(i).expenseType=='Salary' ){
                            totSalary+=results.rows.item(i).expenseAmount; 
                             }
@@ -96,7 +101,6 @@
 							elm.appendChild(li);
 						}
                    
-
                     }        
 									       
 //for loop
@@ -104,10 +108,9 @@
                     
                      document.getElementById("totIncome").innerHTML ='<b>Total Income: $</b>' +formatCurrency(totalIncome) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Salary:</b> $' + formatCurrency(totSalary) + '\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Other:</b> $' + formatCurrency(totOther);
                     
-                document.getElementById("balanceV").innerHTML ='<b>Total Balance: $</b>' + (formatCurrency(balanceVar- totalss+totalIncome));
+                document.getElementById("balanceV").innerHTML ='<b>Total Balance: $</b>' + (formatCurrency(balanceVar- totalss+totalIncome)) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Mason Money:</b> $' + formatCurrency(mason);
 });
 			});
-
 });
         
 		$('#resetDB').click(function(){
@@ -124,8 +127,8 @@
     <p id="test"</p>
     <p id="totIncome"</p>
     <p id="balanceV"</p>
-    <script type="application/javascript">
 
+    <script type="application/javascript">
 </script>
 
     

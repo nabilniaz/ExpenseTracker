@@ -19,6 +19,7 @@ var contentMessageVar = null;
 var contentOKVar = null;
 var confirmationOKVar = null;
 var balanceAmountVar = null;
+var balanceTypeVar=null;
 var d = new Date();
 var curr_date = d.getDate();
 var curr_month = d.getMonth() + 1;
