@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<meta charset="utf-8">
-	<title>Expense Tracker</title>
+	<title>MyMoney</title>
 	<link rel="stylesheet" href="jquery.mobile-1.0b1/jquery.mobile-1.0b1.min.css" />
 	<link rel="stylesheet" href="jquery-custom-styles.css" />
 	<script type="text/javascript" src="jquery.mobile-1.0b1/jquery-1.6.1.min.js"></script>
@@ -11,454 +11,170 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
+        <style>
+    .ui-header {
+  background: 	#228B22;
+}
+        </style>
 </head>
 <body>
 
 <div data-role="page">
+    <div data-role = "navbar" data-type = "horizontal" align = "center">
+            <ul>
+                <li><a href = "index.html" rel="external">Home</a></li>
+                <li><a href = "balance.html" rel="external">Balance</a></li>
+                <li><a href = "income.html" rel="external">Income</a></li>
+                <li><a href = "expense.html" rel="external">Expense</a></li>
+            </ul>
+    </div>
+
 
 	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
 		<h1>MyMoney</h1>
 	</div>
 
 	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
-
-        //added for testing
-    
-    
-    <center>
-    <a href = "index.html">Home</a> || <a href = "entries.html">result</a>
-        </center>
-        
-	<form id="expenseForm" method="post">
-
-		<div data-role="fieldcontain">
-			<label for="expenseType">Type:</label>
-			<select name="expenseType" id="expenseType">
-				<option value="Food">Food</option>
-				<option value="Gas">Gas</option>
-                <option value="Entertainment">Entertainment</option>
-				<option value="Misc">Misc</option>
-			</select>
-		</div>
-
-		<div data-role="fieldcontain">
-			<label for="expenseAmount">Amount:</label>
-			<input type="number" name="expenseAmount" id="expenseAmount" value="0.0" />
-		</div>
-
-		<div data-role="fieldcontain">
-			<label for="expenseDate">Date:</label>
-			<input type="date" name="expenseDate" id="expenseDate" value='date_string'/>
-		</div>
-
-		<p>
-			<a href="" id="submitExpense" data-role="button">Save Expense</a>
-		</p>
-
-	</form>
-        
-        
-<form id="IncomeForm" method="post">
-
-		<div data-role="fieldcontain">
-			<label for="IncomeType">Type:</label>
-			<select name="IncomeType" id="IncomeType">
-				<option value="Salary">Salary</option>
-				<option value="Other">Other</option>
-			</select>
-		</div>
-
-		<div data-role="fieldcontain">
-			<label for="IncomeAmount">Amount:</label>
-			<input type="number" name="IncomeAmount" id="IncomeAmount" value="0.0" />
-		</div>
-
-		<div data-role="fieldcontain">
-			<label for="IncomeDate">Date:</label>
-			<input type="date" name="IncomeDate" id="IncomeDate" value='date_string' />
-		</div>
-
-		<p>
-			<a href="" id="submitIncome" data-role="button">Save Income</a>
-		</p>
-
-	</form>
-        
-<form id="balanceForm" method="post">
-
-		
-		<div data-role="fieldcontain">
-			<label for="balanceAmount">Amount:</label>
-			<input type="number" name="balanceAmount" id="balanceAmount" value="0.0" />
-		</div>
-
-		
-
-		<p>
-			<a href="" id="submitBalance" data-role="button">Save Balance</a>
-		</p>
-
-	</form>
-            </div>
-	
-	<!-- contentDialog -->
-	<div align="CENTER" data-role="content" id="contentDialog" name="contentDialog">
-		<p><span id="contentMessage" name="contentMessage"></span></p>
-		<a id="contentOK" name="contentOK" href="" data-role="button" data-inline="true">OK</a>
-		<a id="confirmationOK" name="confirmationOK" href="index.html" rel="external" data-role="button" data-inline="true">OK</a>
+		<h3>Expense Entries</h3>
+		<ul id="entriesUL"></ul><br>
+		<p><a href="" id="resetDB" data-role="button">Reset Database</a></p>
 	</div>
-	
+    
+		<script type="application/javascript">
+    </script>
+    
 	<script type="application/javascript">
+        var totalss=0;
+        var totalIncome=0;
+        var totSalary=0;
+        var totOther=0;
+        var totFood=0;
+        var totGas=0;
+        var totEntertainment=0;
+        var totMisc=0;
+        var balanceVar=0;
+        var mason=0;
+        var totmasonin=0;
+        var totmasonex=0;
 		$(document).ready(function(){
-			// Assign global variables
-			contentMainVar = $('#contentMain');
-			expenseTypeVar = $('#expenseType');
-			expenseAmountVar = $('#expenseAmount');
-			expenseDateVar = $('#expenseDate');
-			contentDialogVar = $('#contentDialog');
-			contentMessageVar = $('#contentMessage');
-			contentOKVar = $('#contentOK');
-			confirmationOKVar = $('#confirmationOK');
-			hideContentDialog();
-			document.getElementById('expenseDate').value = date_string;
-		});
-	
-		$('#contentOK').click(function(){
-			hideContentDialog();
-			showMain();
-			return false;
-		});
-	
-		$('#contentOK').tap(function(){
-			hideContentDialog();
-			showMain();
-			return false;
-		});
-	
-		$('#submitExpense').click(function(){
-			$('#expenseForm').submit();
-			return false;
-		});
-	
-		$('#submitExpense').tap(function(){
-			$('#expenseForm').submit();
-			return false;
-		});
-	
-		$('#expenseForm').submit(function(){
-			var err = false;
-			var errMessage = null;
-	
-			// Hide the Main content
-			hideMain();
-	
-			// Show content dialog
-			showContentDialog();
-	
-			// Verify form is not empty
-			// Not intended to be comprehensive validation
-			// Keeping it simple for demo
-			if(
-				expenseTypeVar.val() == EMPTY || expenseAmountVar.val() == EMPTY || expenseDateVar.val() == EMPTY
-				||
-				expenseTypeVar.val() == null || expenseAmountVar.val() == null || expenseDateVar.val() == null || expenseAmountVar.val()<0
-			){
-				err = true;
-				errMessage = 'Please fill out the form.';
-			}
-	
-			// If validation fails, show Dialog content
-			if (err == true) {
-				contentDialogAsError(errMessage);
-				return false;
-			}
-	
-			// If validation passes, show Transition content
-			contentDialogAsTransition('Processing your request. Please wait.');
-	
-			// Save form to local Web SQL Database; Database initilized in jquery-custom-scripting.js
-			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
-			// Keeping it simple for demo
+			var elm = document.getElementById('entriesUL'), li;
+           // window.value+=results.rows.item(i).expenseAmount;
+			console.dir(db);
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate) values (?, ?, ?)', [expenseTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val()],
-				function(tx, results) {
-					// Display confirmation message
-					contentDialogAsConfirmation('Expense has been added.');
-				},function(err) {
-					// Display error message
-					contentDialogAsError('Error processing SQL: ' + err.code);
-				});
+				tx.executeSql('SELECT * FROM expenses ORDER BY expenseDate DESC', [], function(tx, results) {
+					
+                    for( i = 0; i < results.rows.length; i++) {
+						li = document.createElement('li');
+                        totexp = document.createElement('totexp');
+                        
+                         if(results.rows.item(i).balanceAmount!=null){
+                             if(results.rows.item(i).expenseType=='Bank'){
+                        balanceVar = results.rows.item(i).balanceAmount;
+                            continue;
+                        }
+                        else{
+                            mason= results.rows.item(i).balanceAmount;
+                            continue;
+                        }
+                         }
+                        
+                        
+                        
+                        if(results.rows.item(i).expenseType=='Food' || results.rows.item(i).expenseType=='Entertainment' || results.rows.item(i).expenseType=='Gas' || results.rows.item(i).expenseType=='Misc' || results.rows.item(i).expenseType=='Mason Exp'){
+                     
+                            if(results.rows.item(i).expenseType=='Food'){
+                                totFood+=results.rows.item(i).expenseAmount;
+                                   totalss+= results.rows.item(i).expenseAmount;
+                            balanceVar-= results.rows.item(i).expenseAmount;
+                            }
+                            else if(results.rows.item(i).expenseType=='Entertainment'){
+                                totEntertainment+=results.rows.item(i).expenseAmount;
+                                   totalss+= results.rows.item(i).expenseAmount;
+                            balanceVar-= results.rows.item(i).expenseAmount;
+                            }
+                            else if(results.rows.item(i).expenseType=='Gas'){
+                                totGas+=results.rows.item(i).expenseAmount;
+                                   totalss+= results.rows.item(i).expenseAmount;
+                            balanceVar-= results.rows.item(i).expenseAmount;
+                            }
+                            else if(results.rows.item(i).expenseType=='Misc') {
+                             totMisc+=results.rows.item(i).expenseAmount;   
+                                   totalss+= results.rows.item(i).expenseAmount;
+                            balanceVar-= results.rows.item(i).expenseAmount;
+                            }
+                            else{
+                                mason -= results.rows.item(i).expenseAmount; 
+                                totmasonex+= results.rows.item(i).expenseAmount;
+                            }
+                            
+                        }
+                        
+                           if(results.rows.item(i).expenseType=='Salary' ||     results.rows.item(i).expenseType== 'Other' || results.rows.item(i).expenseType=='Mason'){
+                     
+                            if(results.rows.item(i).expenseType=='Salary' ){
+                           totSalary+=results.rows.item(i).expenseAmount;
+                                   totalIncome+= results.rows.item(i).expenseAmount;
+                       balanceVar+= results.rows.item(i).expenseAmount;
+                            }
+                               if (results.rows.item(i).expenseType=='Other'){
+                                   totOther+=results.rows.item(i).expenseAmount;
+                                      totalIncome+= results.rows.item(i).expenseAmount;
+                       balanceVar+= results.rows.item(i).expenseAmount;
+                               }
+                        if(results.rows.item(i).expenseType=='Mason'){
+                            mason+=results.rows.item(i).expenseAmount;
+                            totmasonin+=results.rows.item(i).expenseAmount;
+                        }
+                           }
+                
+                        
+                   
+						li.innerHTML = '<b>Type:</b> ' + results.rows.item(i).expenseType + '<br><b>Amount:</b> $' + formatCurrency(results.rows.item(i).expenseAmount) + 
+                            '<br><b>Date</b> ' + results.rows.item(i).expenseDate + '<br><br>';
+						if(elm.firstChild) {
+							elm.insertBefore(li,elm.firstChild);
+						} else {
+							elm.appendChild(li);
+						}
+                   
+                    }        
+									       
+//for loop
+		        document.getElementById("test").innerHTML ='<b>Total Expenses: $</b>' +formatCurrency(totalss) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Food:</b> $' + formatCurrency(totFood) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Entertainment:</b> $' + formatCurrency(totEntertainment) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Gas:</b> $' + formatCurrency(totGas)+ '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Misc:</b> $' + formatCurrency(totMisc) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Mason Expenses:</b> $' + formatCurrency(totmasonex) ;
+                    
+                     document.getElementById("totIncome").innerHTML ='<b>Total Income: $</b>' +formatCurrency(totalIncome) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Salary:</b> $' + formatCurrency(totSalary) + '\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Other:</b> $' + formatCurrency(totOther) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Mason Income:</b> $' + formatCurrency(totmasonin) 
+                    
+                document.getElementById("balanceV").innerHTML ='<b>Total Balance: $</b>' + (formatCurrency(balanceVar)) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Mason Money:</b> $' + formatCurrency(mason);
+});
 			});
-	
-			return false;
-		});
-	
-		function hideMain(){
-			contentMainVar.hide();
-		}
-		function showMain(){
-			contentMainVar.show();
-		}
-		function hideContentDialog(){
-			contentDialogVar.hide();
-		}
-		function showContentDialog(){
-			contentDialogVar.show();
-		}
-	
-		function contentDialogAsTransition(message){
-			contentMessageVar.text(message);
-			contentOKVar.hide();
-			confirmationOKVar.hide();
-		}
-		function contentDialogAsError(message){
-			contentMessageVar.text(message);
-			contentOKVar.show();
-			confirmationOKVar.hide();
-		}
-		function contentDialogAsConfirmation(message){
-			contentMessageVar.text(message);
-			contentOKVar.hide();
-			confirmationOKVar.show();
-		}
+});
         
+		$('#resetDB').click(function(){
+			resetDB();
+			return false;
+		});
+	
+		$('#resetDB').tap(function(){
+			resetDB();
+			return false;
+		});
 	</script>
-    
-    <script type="application/javascript">
-		$(document).ready(function(){
-			// Assign global variables
-			contentMainVar = $('#contentMain');
-			IncomeTypeVar = $('#IncomeType');
-			IncomeAmountVar = $('#IncomeAmount');
-			IncomeDateVar = $('#IncomeDate');
-			contentDialogVar = $('#contentDialog');
-			contentMessageVar = $('#contentMessage');
-			contentOKVar = $('#contentOK');
-			confirmationOKVar = $('#confirmationOK');
-			hideContentDialog();
-            
-			document.getElementById('expenseDate').value = date_string;
-		});
 	
-		$('#contentOK').click(function(){
-			hideContentDialog();
-			showMain();
-			return false;
-		});
-	
-		$('#contentOK').tap(function(){
-			hideContentDialog();
-			showMain();
-			return false;
-		});
-	
-		$('#submitIncome').click(function(){
-			$('#IncomeForm').submit();
-			return false;
-		});
-	
-		$('#submitIncome').tap(function(){
-			$('#IncomeForm').submit();
-			return false;
-		});
-	
-		$('#IncomeForm').submit(function(){
-			var err = false;
-			var errMessage = null;
-	
-			// Hide the Main content
-			hideMain();
-	
-			// Show content dialog
-			showContentDialog();
-	
-			// Verify form is not empty
-			// Not intended to be comprehensive validation
-			// Keeping it simple for demo
-			if(
-				IncomeTypeVar.val() == EMPTY || IncomeAmountVar.val() == EMPTY || IncomeDateVar.val() == EMPTY
-				||
-				IncomeTypeVar.val() == null || IncomeAmountVar.val() == null || IncomeDateVar.val() == null
-			){
-				err = true;
-				errMessage = 'Please fill out the form.';
-			}
-	
-			// If validation fails, show Dialog content
-			if (err == true) {
-				contentDialogAsError(errMessage);
-				return false;
-			}
-	
-			// If validation passes, show Transition content
-			contentDialogAsTransition('Processing your request. Please wait.');
-	
-			// Save form to local Web SQL Database; Database initilized in jquery-custom-scripting.js
-			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
-			// Keeping it simple for demo
-			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate) values (?, ?, ?)', [IncomeTypeVar.val(), IncomeAmountVar.val(), IncomeDateVar.val()],
-				function(tx, results) {
-					// Display confirmation message
-					contentDialogAsConfirmation('Income has been added.');
-				},function(err) {
-					// Display error message
-					contentDialogAsError('Error processing SQL: ' + err.code);
-				});
-			});
-	
-			return false;
-		});
-	
-		function hideMain(){
-			contentMainVar.hide();
-		}
-		function showMain(){
-			contentMainVar.show();
-		}
-		function hideContentDialog(){
-			contentDialogVar.hide();
-		}
-		function showContentDialog(){
-			contentDialogVar.show();
-		}
-	
-		function contentDialogAsTransition(message){
-			contentMessageVar.text(message);
-			contentOKVar.hide();
-			confirmationOKVar.hide();
-		}
-		function contentDialogAsError(message){
-			contentMessageVar.text(message);
-			contentOKVar.show();
-			confirmationOKVar.hide();
-		}
-		function contentDialogAsConfirmation(message){
-			contentMessageVar.text(message);
-			contentOKVar.hide();
-			confirmationOKVar.show();
-		}
-	</script>
-    
-    <script type="application/javascript">
-		$(document).ready(function(){
-			// Assign global variables
-			contentMainVar = $('#contentMain');
-			IncomeTypeVar = $('#IncomeType');
-			balanceAmountVar = $('#balanceAmount');
-			IncomeDateVar = $('#IncomeDate');
-			contentDialogVar = $('#contentDialog');
-			contentMessageVar = $('#contentMessage');
-			contentOKVar = $('#contentOK');
-			confirmationOKVar = $('#confirmationOK');
-			hideContentDialog();
-            
-			document.getElementById('expenseDate').value = date_string;
-		});
-	
-		$('#contentOK').click(function(){
-			hideContentDialog();
-			showMain();
-			return false;
-		});
-	
-		$('#contentOK').tap(function(){
-			hideContentDialog();
-			showMain();
-			return false;
-		});
-	
-		$('#submitBalance').click(function(){
-			$('#balanceForm').submit();
-			return false;
-		});
-	
-		$('#submitbalance').tap(function(){
-			$('#balanceForm').submit();
-			return false;
-		});
-	
-		$('#balanceForm').submit(function(){
-			var err = false;
-			var errMessage = null;
-	
-			// Hide the Main content
-			hideMain();
-	
-			// Show content dialog
-			showContentDialog();
-	
-			// Verify form is not empty
-			// Not intended to be comprehensive validation
-			// Keeping it simple for demo
-			
-	
-			// If validation fails, show Dialog content
-			if (err == true) {
-				contentDialogAsError(errMessage);
-				return false;
-			}
-	
-			// If validation passes, show Transition content
-			contentDialogAsTransition('Processing your request. Please wait.');
-	
-			// Save form to local Web SQL Database; Database initilized in jquery-custom-scripting.js
-			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
-			// Keeping it simple for demo
-			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO expenses (expenseType, expenseAmount, expenseDate, balanceAmount) values (?, ?, ?,?)', [expenseTypeVar.val(), expenseAmountVar.val(), expenseDateVar.val(), balanceAmountVar.val()],
-				function(tx, results) {
-					// Display confirmation message
-					contentDialogAsConfirmation('Balance has been added.');
-				},function(err) {
-					// Display error message
-					contentDialogAsError('Error processing SQL: ' + err.code);
-				});
-			});
-	
-			return false;
-		});
-	
-		function hideMain(){
-			contentMainVar.hide();
-		}
-		function showMain(){
-			contentMainVar.show();
-		}
-		function hideContentDialog(){
-			contentDialogVar.hide();
-		}
-		function showContentDialog(){
-			contentDialogVar.show();
-		}
-	
-		function contentDialogAsTransition(message){
-			contentMessageVar.text(message);
-			contentOKVar.hide();
-			confirmationOKVar.hide();
-		}
-		function contentDialogAsError(message){
-			contentMessageVar.text(message);
-			contentOKVar.show();
-			confirmationOKVar.hide();
-		}
-		function contentDialogAsConfirmation(message){
-			contentMessageVar.text(message);
-			contentOKVar.hide();
-			confirmationOKVar.show();
-		}
-        
-	</script>
-      
+    <p id="test"</p>
+    <p id="totIncome"</p>
+    <p id="balanceV"</p>
 
-	<div id="footerDiv" data-role="footer" data-theme="b" data-id="footer" data-position="fixed">
-		<div data-role="navbar" data-type="horizontal" align="center">
-			<ul>
-				<li><a href="index.html" data-icon="check" data-iconpos="top" data-ajax="false">Expense</a></li>
-				<li><a href="entries.html" data-icon="grid" data-iconpos="top" data-ajax="false">Entries</a></li>
-			</ul>
-		</div>
-	</div>
+    <script type="application/javascript">
+</script>
+
+  //sdf  
+    
+            
+
+</div>
+
+</body>
+</html>
 
 </div>
 

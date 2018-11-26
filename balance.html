@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>MyMoney</title>
+	<link rel="stylesheet" href="jquery.mobile-1.0b1/jquery.mobile-1.0b1.min.css" />
+	<link rel="stylesheet" href="jquery-custom-styles.css" />
+	<script type="text/javascript" src="jquery.mobile-1.0b1/jquery-1.6.1.min.js"></script>
+	<script type="text/javascript" src="jquery-custom-scripting.js"></script>
+	<script type="text/javascript" src="jquery.mobile-1.0b1/jquery.mobile-1.0b1.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+    
+        <style>
+   .ui-header {
+  background: 	#228B22;
+}
+        </style>
+    
+    </head>
+    
+<body>
+    
+   
+<div data-role="page">
+    <div data-role = "navbar" data-type = "horizontal" align = "center">
+            <ul>
+                <li><a href = "index.html" rel="external">Home</a></li>
+                <li><a href = "balance.html" rel="external">Balance</a></li>
+                <li><a href = "income.html" rel="external">Income</a></li>
+                <li><a href = "expense.html" rel="external">Expense</a></li>
+            </ul>
+    </div>
+
+
+	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
+		<h1>MyMoney</h1>
+	</div>
+
+	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
+        
+        
+
+        
+<form id="balanceForm" method="post">
+
+		<div data-role="fieldcontain">
+			<label for="balanceType">Type:</label>
+			<select name="balanceType" id="balanceType">
+				<option value="Bank">Bank</option>
+				<option value="masonMoney">Mason Money</option>
+			</select>
+		</div>	
+    
+    
+    
+		<div data-role="fieldcontain">
+			<label for="balanceAmount">Amount:</label>
+			<input type="number" name="balanceAmount" id="balanceAmount" value="0.0" />
+		</div>
+
+		
+
+		<p>
+			<a href="" id="submitBalance" data-role="button">Save Balance</a>
+		</p>
+
+	</form>
+            </div>
+	
+	<!-- contentDialog -->
+	<div align="CENTER" data-role="content" id="contentDialog" name="contentDialog">
+		<p><span id="contentMessage" name="contentMessage"></span></p>
+		<a id="contentOK" name="contentOK" href="" data-role="button" data-inline="true">OK</a>
+		<a id="confirmationOK" name="confirmationOK" href="index.html" rel="external" data-role="button" data-inline="true">OK</a>
+	</div>
+	
+
+    
+
+    
+    <script type="application/javascript">
+		$(document).ready(function(){
+			// Assign global variables
+			contentMainVar = $('#contentMain');
+			balanceTypeVar = $('#balanceType');
+			balanceAmountVar = $('#balanceAmount');
+			contentDialogVar = $('#contentDialog');
+			contentMessageVar = $('#contentMessage');
+			contentOKVar = $('#contentOK');
+			confirmationOKVar = $('#confirmationOK');
+			hideContentDialog();
+            
+            
+            //document.getElementById('expenseDate').value = date_string;
+
+            
+		});
+	
+		$('#contentOK').click(function(){
+			hideContentDialog();
+			showMain();
+			return false;
+		});
+	
+		$('#contentOK').tap(function(){
+			hideContentDialog();
+			showMain();
+			return false;
+		});
+	
+		$('#submitBalance').click(function(){
+			$('#balanceForm').submit();
+			return false;
+		});
+	
+		$('#submitbalance').tap(function(){
+			$('#balanceForm').submit();
+			return false;
+		});
+	
+		$('#balanceForm').submit(function(){
+			var err = false;
+			var errMessage = null;
+	
+			// Hide the Main content
+			hideMain();
+	
+			// Show content dialog
+			showContentDialog();
+	
+			// Verify form is not empty
+			// Not intended to be comprehensive validation
+			// Keeping it simple for demo
+			
+	
+			// If validation fails, show Dialog content
+			if (err == true) {
+				contentDialogAsError(errMessage);
+				return false;
+			}
+	
+			// If validation passes, show Transition content
+			contentDialogAsTransition('Processing your request. Please wait.');
+	
+			// Save form to local Web SQL Database; Database initilized in jquery-custom-scripting.js
+			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
+			// Keeping it simple for demo
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO expenses (expenseType,  balanceAmount) values (?, ?)', [balanceTypeVar.val(), balanceAmountVar.val()],
+				function(tx, results) {
+					// Display confirmation message
+					contentDialogAsConfirmation('Balance has been added.');
+				},function(err) {
+					// Display error message
+					contentDialogAsError('Error processing SQL: ' + err.code);
+				});
+			});
+	
+			return false;
+		});
+	
+		function hideMain(){
+			contentMainVar.hide();
+		}
+		function showMain(){
+			contentMainVar.show();
+		}
+		function hideContentDialog(){
+			contentDialogVar.hide();
+		}
+		function showContentDialog(){
+			contentDialogVar.show();
+		}
+	
+		function contentDialogAsTransition(message){
+			contentMessageVar.text(message);
+			contentOKVar.hide();
+			confirmationOKVar.hide();
+		}
+		function contentDialogAsError(message){
+			contentMessageVar.text(message);
+			contentOKVar.show();
+			confirmationOKVar.hide();
+		}
+		function contentDialogAsConfirmation(message){
+			contentMessageVar.text(message);
+			contentOKVar.hide();
+			confirmationOKVar.show();
+		}
+        
+	</script>
+      
+
+
+</div>
+
+</body>
+</html>

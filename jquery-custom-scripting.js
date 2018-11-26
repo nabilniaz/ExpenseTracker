@@ -14,6 +14,13 @@ var expenseTypeVar = null;
 var expenseAmountVar = null;
 var expenseDateVar = null;
 var totalExpenseVar = null;
+
+//added
+var IncomeTypeVar = null;
+var IncomeAmountVar = null;
+var IncomeDateVar = null;
+
+
 var contentDialogVar = null;
 var contentMessageVar = null;
 var contentOKVar = null;
