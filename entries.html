@@ -94,7 +94,8 @@
                             balanceVar-= results.rows.item(i).expenseAmount;
                             }
                             else{
-                                mason -= results.rows.item(i).expenseAmount;   
+                                mason -= results.rows.item(i).expenseAmount; 
+                                totmasonex+= results.rows.item(i).expenseAmount;
                             }
                             
                         }
@@ -113,6 +114,7 @@
                                }
                         if(results.rows.item(i).expenseType=='Mason'){
                             mason+=results.rows.item(i).expenseAmount;
+                            totmasonin+=results.rows.item(i).expenseAmount;
                         }
                            }
                 
