@@ -203,17 +203,26 @@
                     
                 document.getElementById("balanceV").innerHTML ='<b>Total Balance: $</b>' + (formatCurrency(balanceVar+totalIncome-totalss)) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Mason Money:</b> $' + formatCurrency(mason);
                     
-                  document.getElementById("goals").innerHTML ='<b>Goal: $</b>' + formatCurrency(goalVar) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 ' + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b>Remainder to Goal:</b> $' + formatCurrency((balanceVar-goalVar)-goalExp+goalInc);
-});
-			});
-});
-     if (balanceVar+totalIncome-totalss <= 0){
+                  document.getElementById("goals").innerHTML ='<b>Spending Goal: $</b>' + formatCurrency(goalVar)  + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b>Remainder to Spend:</b> $' + formatCurrency(goalVar-goalExp);
+                    
+                     if ((balanceVar+totalIncome-totalss)<0){
             document.getElementById("lowbal").style.display = "block";
             
             }
-    if (totalss >= goalExp){
+            else{
+                    document.getElementById("lowbal").style.display = "none";
+            }
+    if (totalss > goalVar){
         document.getElementById("alarm").style.display = "block";
     }
+    else{
+                document.getElementById("alarm").style.display = "none";
+
+    }
+});
+			});
+});
+    
 		$('#resetDB').click(function(){
 			resetDB();
 			return false;
