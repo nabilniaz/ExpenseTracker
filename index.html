@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -11,39 +12,57 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
-        <style>
-    .ui-header {
-  background: 	#228B22;
+ <style>
+ .ui-header {
+ background: #228B22;
 }
-        </style>
+
+     #alarm, .lowbal{
+         font-size: 25px
+         padding:10px;
+         text-align:center;
+         background: #FF0000;
+         margin:auto;
+     }
+ </style>
 </head>
 <body>
 
 <div data-role="page">
-    <div data-role = "navbar" data-type = "horizontal" align = "center">
-            <ul>
-                <li><a href = "index.html" rel="external">Home</a></li>
-                <li><a href = "balance.html" rel="external">Balance</a></li>
-                <li><a href = "income.html" rel="external">Income</a></li>
-                <li><a href = "expense.html" rel="external">Expense</a></li>
-            </ul>
-    </div>
+ <div data-role = "navbar" data-type = "horizontal" align = "center">
+ <ul>
+ <li><a href = "index.html" rel="external">Home</a></li>
+ <li><a href = "balance.html" rel="external">Balance</a></li>
+ <li><a href = "income.html" rel="external">Income</a></li>
+ <li><a href = "expense.html" rel="external">Expense</a></li>
+ </ul>
+ </div>
 
 
 	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
-		<h1>MyMoney</h1>
+	<h1>MyMoney</h1>
 	</div>
 
+    <div id = "alarm" data-role = "alarm" data-theme = "b" data-position = "inline" display = "none">
+    <h1>Goal expense limit exceeded
+        </h1>
+    </div>
+    
+    <div id = "lowbal" data-role= "alarm" data-theme = "b" data-position = "inline" display = "none">
+    <h1>Your balance is too low
+        </h1>
+    </div>
+    
 	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
-		<h3>Expense Entries</h3>
-		<ul id="entriesUL"></ul><br>
-		<p><a href="" id="resetDB" data-role="button">Reset Database</a></p>
+	<h3>Expense Entries</h3>
+	<ul id="entriesUL"></ul><br>
+	<p><a href="" id="resetDB" data-role="button">Reset Database</a></p>
 	</div>
-    
-		<script type="application/javascript">
-    </script>
-    
+ 
 	<script type="application/javascript">
+ </script>
+ 
+		<script type="application/javascript">
         var totalss=0;
         var totalIncome=0;
         var totSalary=0;
@@ -56,14 +75,22 @@
         var mason=0;
         var totmasonin=0;
         var totmasonex=0;
+        var goalVar=0;
+        var currentMonth=0;
+        var remGoal=0;
+        var goalExp=0;
+        var goalInc=0;
 		$(document).ready(function(){
 			var elm = document.getElementById('entriesUL'), li;
            // window.value+=results.rows.item(i).expenseAmount;
 			console.dir(db);
 			db.transaction(function(tx) {
 				tx.executeSql('SELECT * FROM expenses ORDER BY expenseDate DESC', [], function(tx, results) {
-					
+                    
+					                        
+
                     for( i = 0; i < results.rows.length; i++) {
+                        
 						li = document.createElement('li');
                         totexp = document.createElement('totexp');
                         
@@ -77,25 +104,37 @@
                             continue;
                         }
                          }
-                        
-                        
+                      if(results.rows.item(i).goalAmount!=null){   
+                          goalVar= results.rows.item(i).goalAmount;
+                          continue;
+                      }
                         
                         if(results.rows.item(i).expenseType=='Food' || results.rows.item(i).expenseType=='Entertainment' || results.rows.item(i).expenseType=='Gas' || results.rows.item(i).expenseType=='Misc' || results.rows.item(i).expenseType=='Mason Exp'){
-                     
+                       currentMonth=results.rows.item(i).expenseDate.substring(5,7);
+                           
+
                             if(results.rows.item(i).expenseType=='Food'){
                                 totFood+=results.rows.item(i).expenseAmount;
                                    totalss+= results.rows.item(i).expenseAmount;
-                            balanceVar-= results.rows.item(i).expenseAmount;
+                                 if(currentMonth==11){
+                                goalExp+=results.rows.item(i).expenseAmount;
+                            }
                             }
                             else if(results.rows.item(i).expenseType=='Entertainment'){
                                 totEntertainment+=results.rows.item(i).expenseAmount;
                                    totalss+= results.rows.item(i).expenseAmount;
                             balanceVar-= results.rows.item(i).expenseAmount;
+                                 if(currentMonth==11){
+                                goalExp+=results.rows.item(i).expenseAmount;
+                            }
                             }
                             else if(results.rows.item(i).expenseType=='Gas'){
                                 totGas+=results.rows.item(i).expenseAmount;
                                    totalss+= results.rows.item(i).expenseAmount;
                             balanceVar-= results.rows.item(i).expenseAmount;
+                                 if(currentMonth==11){
+                                goalExp+=results.rows.item(i).expenseAmount;
+                            }
                             }
                             else if(results.rows.item(i).expenseType=='Misc') {
                              totMisc+=results.rows.item(i).expenseAmount;   
@@ -111,15 +150,24 @@
                         
                            if(results.rows.item(i).expenseType=='Salary' ||     results.rows.item(i).expenseType== 'Other' || results.rows.item(i).expenseType=='Mason'){
                      
+                               currentMonth=results.rows.item(i).expenseDate.substring(5,7);
+                            
+                               
                             if(results.rows.item(i).expenseType=='Salary' ){
                            totSalary+=results.rows.item(i).expenseAmount;
                                    totalIncome+= results.rows.item(i).expenseAmount;
                        balanceVar+= results.rows.item(i).expenseAmount;
+                                if(currentMonth==11){
+                                goalInc+=results.rows.item(i).expenseAmount;
+                            }
                             }
                                if (results.rows.item(i).expenseType=='Other'){
                                    totOther+=results.rows.item(i).expenseAmount;
                                       totalIncome+= results.rows.item(i).expenseAmount;
                        balanceVar+= results.rows.item(i).expenseAmount;
+                                   if(currentMonth==11){
+                                goalInc+=results.rows.item(i).expenseAmount;
+                            }
                                }
                         if(results.rows.item(i).expenseType=='Mason'){
                             mason+=results.rows.item(i).expenseAmount;
@@ -144,11 +192,19 @@
                     
                      document.getElementById("totIncome").innerHTML ='<b>Total Income: $</b>' +formatCurrency(totalIncome) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Salary:</b> $' + formatCurrency(totSalary) + '\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Other:</b> $' + formatCurrency(totOther) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Total Mason Income:</b> $' + formatCurrency(totmasonin) 
                     
-                document.getElementById("balanceV").innerHTML ='<b>Total Balance: $</b>' + (formatCurrency(balanceVar)) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Mason Money:</b> $' + formatCurrency(mason);
+                document.getElementById("balanceV").innerHTML ='<b>Total Balance: $</b>' + (formatCurrency(balanceVar+totalIncome-totalss)) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b> Mason Money:</b> $' + formatCurrency(mason);
+                    
+                  document.getElementById("goals").innerHTML ='<b>Goal: $</b>' + formatCurrency(goalVar) + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 ' + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0 <b>Remainder to Goal:</b> $' + formatCurrency((balanceVar-goalVar)-goalExp+goalInc);
 });
 			});
 });
-        
+     if (balanceVar+totalIncome-totalss <= 0){
+            document.getElementById("lowbal").style.display = "block";
+            
+            }
+    if (totalss >= goalExp){
+        document.getElementById("alarm").style.display = "block";
+    }
 		$('#resetDB').click(function(){
 			resetDB();
 			return false;
@@ -163,18 +219,11 @@
     <p id="test"</p>
     <p id="totIncome"</p>
     <p id="balanceV"</p>
+        <p id="goals"</p>
 
     <script type="application/javascript">
 </script>
 
-  //sdf  
-    
-            
-
-</div>
-
-</body>
-</html>
 
 </div>
 

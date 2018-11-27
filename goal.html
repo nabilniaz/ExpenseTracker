@@ -11,16 +11,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
-    
-        <style>
-   .ui-header {
+<style>
+    .ui-header {
   background: 	#228B22;
 }
         </style>
     
-    </head>  
+    </head>
 <body>
-   
+
+    
 <div data-role="page">
     <div data-role = "navbar" data-type = "horizontal" align = "center">
             <ul>
@@ -31,37 +31,32 @@
             </ul>
     </div>
 
-
 	<div id="headerDiv" data-role="header" data-theme="b" data-position="inline">
 		<h1>MyMoney</h1>
 	</div>
 
 	<div data-role="content" data-theme="c" id="contentMain" name="contentMain">
+
         
         
 
         
-<form id="balanceForm" method="post">
 
-		<div data-role="fieldcontain">
-			<label for="balanceType">Type:</label>
-			<select name="balanceType" id="balanceType">
-				<option value="Bank">Bank</option>
-				<option value="masonMoney">Mason Money</option>
-			</select>
-		</div>	
-    
+        
+        <form id="GoalForm" method="post">
+
+
     
     
 		<div data-role="fieldcontain">
-			<label for="balanceAmount">Amount:</label>
-			<input type="number" name="balanceAmount" id="balanceAmount" value="0.0" />
+			<label for="goalAmount">Amount:</label>
+			<input type="number" name="GoalAmount" id="GoalAmount" value="0.0" />
 		</div>
 
 		
 
 		<p>
-			<a href="" id="submitBalance" data-role="button">Save Balance</a>
+			<a href="" id="submitGoal" data-role="button">Save Goal</a>
 		</p>
 
 	</form>
@@ -76,24 +71,20 @@
 	
 
     
-
-    
     <script type="application/javascript">
 		$(document).ready(function(){
 			// Assign global variables
 			contentMainVar = $('#contentMain');
 			balanceTypeVar = $('#balanceType');
-			balanceAmountVar = $('#balanceAmount');
+			goalAmountVar = $('#GoalAmount');
+			IncomeDateVar = $('#IncomeDate');
 			contentDialogVar = $('#contentDialog');
 			contentMessageVar = $('#contentMessage');
 			contentOKVar = $('#contentOK');
 			confirmationOKVar = $('#confirmationOK');
 			hideContentDialog();
             
-            
-            //document.getElementById('expenseDate').value = date_string;
-
-            
+		//	document.getElementById('expenseDate').value = date_string;
 		});
 	
 		$('#contentOK').click(function(){
@@ -108,17 +99,17 @@
 			return false;
 		});
 	
-		$('#submitBalance').click(function(){
-			$('#balanceForm').submit();
+		$('#submitGoal').click(function(){
+			$('#GoalForm').submit();
 			return false;
 		});
 	
-		$('#submitbalance').tap(function(){
-			$('#balanceForm').submit();
+		$('#submitGoal').tap(function(){
+			$('#GoalForm').submit();
 			return false;
 		});
 	
-		$('#balanceForm').submit(function(){
+		$('#GoalForm').submit(function(){
 			var err = false;
 			var errMessage = null;
 	
@@ -146,10 +137,10 @@
 			// Proper implementation would use feature detection with Modernizr or send data to server via ajax
 			// Keeping it simple for demo
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO expenses (expenseType,  balanceAmount) values (?, ?)', [balanceTypeVar.val(), balanceAmountVar.val()],
+				tx.executeSql('INSERT INTO expenses (goalAmount) values (?)', [goalAmountVar.val()],
 				function(tx, results) {
 					// Display confirmation message
-					contentDialogAsConfirmation('Balance has been added.');
+					contentDialogAsConfirmation('Goal has been added.');
 				},function(err) {
 					// Display error message
 					contentDialogAsError('Error processing SQL: ' + err.code);
@@ -189,7 +180,7 @@
 		}
         
 	</script>
-      
+    
 
 
 </div>

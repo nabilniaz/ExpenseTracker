@@ -4,9 +4,10 @@ $(document).bind("mobileinit", function(){
 	// Initilize Web SQL Database
 	db = window.openDatabase("ExpenseTrackerDemo", "1.0", "Expense Tracker Demo Database", 200000);
 	db.transaction(function(tx) {
-		tx.executeSql("CREATE TABLE IF NOT EXISTS expenses (expenseID INTEGER PRIMARY KEY, expenseType TEXT, expenseAmount INTEGER, balanceAmount INTEGER, expenseDate TEXT)");
+		tx.executeSql("CREATE TABLE IF NOT EXISTS expenses (expenseID INTEGER PRIMARY KEY, expenseType TEXT, expenseAmount INTEGER, balanceAmount INTEGER, goalAmount INTEGER, expenseDate TEXT)");
 	});
 });
+
 
 // Global declarations
 var contentMainVar = null;
@@ -15,17 +16,14 @@ var expenseAmountVar = null;
 var expenseDateVar = null;
 var totalExpenseVar = null;
 
-//added
-var IncomeTypeVar = null;
-var IncomeAmountVar = null;
-var IncomeDateVar = null;
-
 
 var contentDialogVar = null;
 var contentMessageVar = null;
 var contentOKVar = null;
 var confirmationOKVar = null;
 var balanceAmountVar = null;
+var goalAmountVar = null;
+var balanceTypeVar = null;
 var d = new Date();
 var curr_date = d.getDate();
 var curr_month = d.getMonth() + 1;
